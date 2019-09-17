@@ -1,8 +1,8 @@
 module.exports = {
   dialect: 'postgres',
-  host: 'localhost',
+  host: '192.168.99.106',
   username: 'postgres',
-  password: 'cofen123',
+  password: '123456',
   database: 'dbmeetapp',
   define: {
     timestamps: true,
