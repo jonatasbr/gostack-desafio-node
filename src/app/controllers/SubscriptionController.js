@@ -4,6 +4,8 @@ import User from '../models/User';
 import Meetup from '../models/Meetup';
 import Subscription from '../models/Subscription';
 
+import Mail from '../../lib/Mail';
+
 class SubscriptionController {
   async index(req, res) {
     const { user_id } = req.userId;
@@ -21,7 +23,16 @@ class SubscriptionController {
         .json({ error: 'Id of the meetup should be number' });
     }
 
-    const meetup = await Meetup.findByPk(req.params.meetupId);
+    const meetup = await Meetup.findByPk(req.params.meetupId, {
+      include: [
+        {
+          model: User,
+          as: 'user',
+          required: true,
+          attributes: ['name', 'email'],
+        },
+      ],
+    });
     if (!meetup) {
       return res.status(400).json({ error: 'Meetup not found' });
     }
@@ -75,6 +86,12 @@ class SubscriptionController {
     const subscription = await Subscription.create({
       user_id: user.id,
       meetup_id: meetup.id,
+    });
+
+    await Mail.sendMail({
+      to: `${meetup.user.name} <${meetup.user.email}>`,
+      subject: `Cadastro em ${meetup.title}`,
+      text: '',
     });
 
     return res.json(subscription);
