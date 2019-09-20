@@ -1,4 +1,4 @@
-#vscode
+# editor vscode
 .vscode/
 
 # Logs
@@ -11,5 +11,8 @@ yarn-error.log*
 # Dependency directories
 node_modules/
 
-#uploads
+# uploads
 tmp/uploads/*
+
+# file env
+.env

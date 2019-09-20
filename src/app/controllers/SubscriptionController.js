@@ -10,7 +10,7 @@ import SubscriptionMail from '../jobs/SubscriptionMail';
 
 class SubscriptionController {
   async index(req, res) {
-    const subscriptions = await Subscription.finddAll({
+    const subscriptions = await Subscription.findAll({
       where: { user_id: req.userId },
       include: [
         {
