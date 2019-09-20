@@ -111,6 +111,56 @@ class SubscriptionController {
 
     return res.json(subscription);
   }
+
+  async delete(req, res) {
+    const schema = Yup.object().shape({
+      subscriptionId: Yup.number().required(),
+    });
+
+    if (!(await schema.isValid(req.params))) {
+      return res.status(400).json({ error: 'Id invalid' });
+    }
+
+    const subscription = await Subscription.findByPk(
+      req.params.subscriptionId,
+      {
+        include: [
+          {
+            model: User,
+            as: 'user',
+            required: true,
+            attributes: ['name', 'email'],
+          },
+          {
+            model: Meetup,
+            as: 'meetup',
+            required: true,
+            attributes: ['id', 'date', 'past'],
+          },
+        ],
+      }
+    );
+
+    if (!subscription) {
+      return res.status(400).json({ error: 'Subscription not found' });
+    }
+
+    if (subscription.user_id !== req.userId) {
+      return res.status(401).json({
+        error: 'Not authorized.',
+      });
+    }
+
+    if (subscription.meetup.past) {
+      return res.status(400).json({
+        error: 'Can not delete subscription of the past meetups',
+      });
+    }
+
+    await subscription.destroy();
+
+    return res.json({ success: 'Subscription deleted with success' });
+  }
 }
 
 export default new SubscriptionController();

@@ -130,7 +130,7 @@ class MeetupController {
     }
 
     if (meetup.past) {
-      return res.status(400).json({ error: 'Can not update past meetups' });
+      return res.status(400).json({ error: 'Can not delete past meetups' });
     }
 
     await meetup.destroy();
