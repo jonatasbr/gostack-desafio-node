@@ -8,7 +8,7 @@ class SubscriptionMail {
   async handle({ data }) {
     const { meetup, user } = data;
 
-    await Mail.sendMail({
+    await Mail.senddMail({
       to: `${meetup.user.name} <${meetup.user.email}>`,
       subject: `Nova inscrição || ${meetup.title}`,
       template: 'subscription',
