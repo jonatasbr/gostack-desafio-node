@@ -14,7 +14,15 @@ class MeetupController {
       return res.status(400).json({ error: 'Id invalid' });
     }
 
-    const meetup = await Meetup.findByPk(id);
+    const meetup = await Meetup.findByPk(id, {
+      include: [
+        {
+          model: File,
+          as: 'image',
+          attributes: ['id', 'path', 'url'],
+        },
+      ],
+    });
     if (!meetup) {
       return res.status(400).json({ error: 'Meetup not found' });
     }
