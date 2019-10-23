@@ -8,27 +8,6 @@ import User from '../models/User';
 import File from '../models/File';
 
 class MeetupController {
-  async detail(req, res) {
-    const { id } = req.params;
-    if (!Number(id)) {
-      return res.status(400).json({ error: 'Id invalid' });
-    }
-
-    const meetup = await Meetup.findByPk(id, {
-      include: [
-        {
-          model: File,
-          as: 'image',
-          attributes: ['id', 'path', 'url'],
-        },
-      ],
-    });
-    if (!meetup) {
-      return res.status(400).json({ error: 'Meetup not found' });
-    }
-    return res.json(meetup);
-  }
-
   async index(req, res) {
     const where = {};
     const { page = 1, date } = req.query;
