@@ -2,6 +2,7 @@ import { Op } from 'sequelize';
 import * as Yup from 'yup';
 
 import User from '../models/User';
+import File from '../models/File';
 import Meetup from '../models/Meetup';
 import Subscription from '../models/Subscription';
 
@@ -20,6 +21,13 @@ class SubscriptionController {
             date: { [Op.gt]: new Date() },
           },
           required: true,
+          include: [
+            {
+              model: File,
+              as: 'image',
+              attributes: ['id', 'path', 'url'],
+            },
+          ],
         },
       ],
       order: [['meetup', 'date', 'asc']],
