@@ -23,7 +23,7 @@ class MeetupController {
     const meetups = await Meetup.findAll({
       where,
       order: ['date'],
-      attributes: ['id', 'title', 'description', 'location', 'date'],
+      attributes: ['id', 'title', 'description', 'location', 'date', 'past'],
       limit: 10,
       offset: (page - 1) * 10,
       include: [
